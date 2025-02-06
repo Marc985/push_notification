@@ -15,7 +15,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "googleServicesFile": "./google-services.json",
+      "package": "com.mycorp.myapp"
+      
     },
     "web": {
       "bundler": "metro",
@@ -23,6 +26,8 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/messaging",
       "expo-router",
       [
         "expo-splash-screen",
@@ -33,6 +38,7 @@
           "backgroundColor": "#ffffff"
         }
       ]
+      ,
     ],
     "experiments": {
       "typedRoutes": true
