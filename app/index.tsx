@@ -2,15 +2,29 @@ import { Text, View } from "react-native";
 import React, { useEffect } from 'react';
 import { Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-
+  import {PermissionsAndroid} from 'react-native';
+ 
 export default function Index() {
+   
+async function requestUserPermission() {
+  const authStatus = await messaging().requestPermission();
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
+  if (enabled) {
+    console.log('Authorization status:', authStatus);
+  }
+}
+
+  const getToken=async()=>{
+    const token = await messaging().getToken();
+    console.log("there is the token:",token);
+  }
    useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-
-    return unsubscribe;
+    requestUserPermission();
+   getToken();
+    
   }, []);
 
   return (
@@ -21,7 +35,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      <Text>Edit app/index.tsx to edit this screen test.</Text>
     </View>
   );
 }
