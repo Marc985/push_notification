@@ -9,7 +9,9 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "bundleIdentifier": "com.anonymous.PushNotification"
     },
     "android": {
       "adaptiveIcon": {
@@ -17,8 +19,7 @@
         "backgroundColor": "#ffffff"
       },
       "googleServicesFile": "./google-services.json",
-      "package": "com.mycorp.myapp"
-      
+      "package": "com.anonymous.PushNotification"
     },
     "web": {
       "bundler": "metro",
