@@ -35,7 +35,7 @@ async function requestUserPermission() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen test.</Text>
+      <Text>Update the UUI</Text>
     </View>
   );
 }
