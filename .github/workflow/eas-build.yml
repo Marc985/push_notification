@@ -1,0 +1,55 @@
+name: preview
+on:
+  push:
+    branches:
+      - main  # Remplace par ta branche principale si nécessaire
+
+jobs:
+  update_or_build:
+    name: EAS Update or Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: yarn
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Check if dependencies changed
+        id: check-deps
+        run: |
+          if git diff --name-only HEAD^ HEAD | grep -q "yarn.lock"; then
+            echo "dependencies_changed=true" >> $GITHUB_ENV
+          else
+            echo "dependencies_changed=false" >> $GITHUB_ENV
+          fi
+
+      - name: Create new build (if dependencies changed)
+        if: env.dependencies_changed == 'true'
+        run: eas build --platform all --non-interactive
+
+      - name: Create preview update (if no new dependencies)
+        if: env.dependencies_changed == 'false'
+        run: eas update --auto
