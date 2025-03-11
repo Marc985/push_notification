@@ -40,8 +40,12 @@ jobs:
       - name: Check if dependencies changed
         id: check-deps
         run: |
-          if git diff --name-only HEAD^ HEAD | grep -q "yarn.lock"; then
-            echo "dependencies_changed=true" >> $GITHUB_ENV
+          if git rev-parse HEAD^ >/dev/null 2>&1; then
+            if git diff --name-only HEAD^ HEAD | grep -qE "package.json|yarn.lock"; then
+              echo "dependencies_changed=true" >> $GITHUB_ENV
+            else
+              echo "dependencies_changed=false" >> $GITHUB_ENV
+            fi
           else
             echo "dependencies_changed=false" >> $GITHUB_ENV
           fi
