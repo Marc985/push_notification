@@ -47,9 +47,9 @@ jobs:
           fi
 
       - name: Create new build (if dependencies changed)
-        if: env.dependencies_changed == 'true'
+        if: github.env.dependencies_changed == 'true'
         run: eas build --platform all --non-interactive
 
       - name: Create preview update (if no new dependencies)
-        if: env.dependencies_changed == 'false'
+        if: github.env.dependencies_changed == 'false'
         run: eas update --auto
